@@ -4,8 +4,8 @@ import re
 import pycountry
 
 # User configuration
-user_id = "USER_ID"
-_ncfa_TOKEN = "YOUR_NCFA_TOKEN"
+user_id = "YOUR_USER_ID"  # See README for instructions
+_ncfa_TOKEN = "YOUR_NCFA_TOKEN"  # See README for instructions
 num_duels = 100  # Number of last duels to fetch (More than ~400 will hit rate limits)
 topN = 3  # Number of top/worst countries to display
 min_guesses = 5  # Minimum number of guesses to consider a country in the stats

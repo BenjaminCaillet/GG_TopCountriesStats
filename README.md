@@ -2,10 +2,13 @@
 
 This project provides a script to analyze your GeoGuessr gameplay statistics, focusing on the top-performing and least-performing countries based on your recent duels.
 
+![Gameplay Statistics](stats.png)
+
 ## Acknowledgments
 
-A significant portion of the API communication code is adapted from the following repository (thank you!):  
-[GeoGuessr-API by EvickaStudio](https://github.com/EvickaStudio/GeoGuessr-API/blob/main/main.py)
+A significant portion of the API communication code is adapted from the following repositories (thank you!):  
+- [GeoGuessr-API by EvickaStudio](https://github.com/EvickaStudio/GeoGuessr-API/blob/main/main.py)  
+- [GGDuelsFetcher by kevinzhao14](https://github.com/kevinzhao14/GGDuelsFetcher)
 
 ## Getting Started
 
@@ -31,6 +34,9 @@ To access most API endpoints, you need to provide a `_ncfa` cookie. Follow these
 5. Click on the request to view its details.
 6. Locate the `_ncfa` token in the request headers or cookies.
 7. Copy the `_ncfa` token and paste it into the script where indicated.
+
+You will also need your profil id which can be found at the bottom of your profil page.
+![Profile Page](profil.png)
 
 ### Usage
 

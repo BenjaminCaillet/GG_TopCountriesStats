@@ -1,19 +1,19 @@
 import requests
-import base64
 import time
 import re
 import pycountry
 
 # User configuration
-user_id = "YOUR_USER_ID"  # YOUR USER ID HERE
-_ncfa_TOKEN = "YOUR_NCFA_TOKEN"  # Insert your _ncfa token here
-num_duels = 100  # Number of last duels to fetch
-topN = 3  # Number of top/worst countries to display
-min_guesses = 3  # Minimum number of guesses to consider a country in the stats
+user_id = "USER_ID"
+_ncfa_TOKEN = "YOUR_NCFA_TOKEN"
+num_duels = 50  # Number of last duels to fetch (More than ~400 will hit rate limits)
+topN = 5  # Number of top/worst countries to display
+min_guesses = 10  # Minimum number of guesses to consider a country in the stats
 
 # Create a session object and set the _ncfa cookie
 session = requests.Session()
 session.cookies.set("_ncfa", _ncfa_TOKEN, domain="www.geoguessr.com")
+session.cookies.set("_ncfa", _ncfa_TOKEN, domain="game-server.geoguessr.com")
 BASE_URL = "https://www.geoguessr.com/api/v4/"  # Base URL for duel games
 
 
@@ -23,9 +23,10 @@ def fetch_game_ids(session, base_url, user_id, max_pages, num_duels):
 
     for page in range(max_pages):
         if len(game_ids) >= num_duels:
+            print("Reached the desired number of duels.")
             break
 
-        # print(f"Fetching page {page + 1}")
+        print(f"Fetching page {page + 1}")
         url = f"{base_url}feed/private"
         if pagination_token:
             url += f"?paginationToken={pagination_token}"
@@ -42,15 +43,17 @@ def fetch_game_ids(session, base_url, user_id, max_pages, num_duels):
 
         # Extract game IDs for "Duels" game mode
         matches = re.findall(
-            r'\\"gameId\\":\\"([\w\d\-]*)\\",\\"gameMode\\":\\"Duels\\"', response.text
+            r'\\"gameId\\":\\"([\w\d\-]*)\\",\\"gameMode\\":\\"Duels\\"',
+            response.text,
         )
         game_ids.extend(matches)
-
+        if page == 535:
+            print("Debug breakpoint reached at page 536")
         # Generate the next pagination token
-        last_entry_time = data["entries"][-1]["time"]
-        pagination_token = base64.b64encode(
-            f'{{"HashKey":{{"S":"{user_id}_activity"}},"Created":{{"S":"{last_entry_time[:23]}Z"}}}}'.encode()
-        ).decode()
+        pagination_token = data["paginationToken"]
+        game_ids = list(dict.fromkeys(game_ids))
+        if (page + 1) % 50 == 0:
+            time.sleep(1)
 
     # Remove duplicates and limit to the N last duels
     game_ids = list(dict.fromkeys(game_ids))[:num_duels]

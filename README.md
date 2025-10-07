@@ -2,7 +2,7 @@
 
 This project provides a script to analyze your GeoGuessr gameplay statistics, focusing on the top-performing and least-performing countries based on your recent duels.
 
-![Gameplay Statistics](stats.png)
+![Gameplay Statistics](images/stats.png)
 
 ## Acknowledgments
 
@@ -36,7 +36,7 @@ To access most API endpoints, you need to provide a `_ncfa` cookie. Follow these
 7. Copy the `_ncfa` token and paste it into the script where indicated.
 
 You will also need your profil id which can be found at the bottom of your profil page.
-![Profile Page](profil.png)
+![Profile Page](images/profil.png)
 
 ### Usage
 

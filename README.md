@@ -36,7 +36,7 @@ To access most API endpoints, you need to provide a `_ncfa` cookie. Follow these
 7. Copy the `_ncfa` token and paste it into the script where indicated.
 
 You will also need your profil id which can be found at the bottom of your profil page.
-![Profile Page](images/profil.png)
+![Profile Page](images/profile.png)
 
 ### Usage
 

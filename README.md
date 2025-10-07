@@ -48,7 +48,7 @@ python main.py
 You can customize the script's behavior by modifying the following parameters in the code:  
 - `num_duels`: Number of recent duels to fetch (default: 100).  
 - `topN`: Number of top/worst countries to display (default: 3).  
-- `min_guesses`: Minimum number of guesses required to include a country in the stats (default: 3).  
+- `min_guesses`: Minimum number of guesses required to include a country in the stats (default: 5).  
 
 The script will fetch your most recent duels and display statistics about the countries you've encountered.
 

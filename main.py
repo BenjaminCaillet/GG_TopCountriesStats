@@ -6,9 +6,9 @@ import pycountry
 # User configuration
 user_id = "USER_ID"
 _ncfa_TOKEN = "YOUR_NCFA_TOKEN"
-num_duels = 50  # Number of last duels to fetch (More than ~400 will hit rate limits)
-topN = 5  # Number of top/worst countries to display
-min_guesses = 10  # Minimum number of guesses to consider a country in the stats
+num_duels = 100  # Number of last duels to fetch (More than ~400 will hit rate limits)
+topN = 3  # Number of top/worst countries to display
+min_guesses = 5  # Minimum number of guesses to consider a country in the stats
 
 # Create a session object and set the _ncfa cookie
 session = requests.Session()

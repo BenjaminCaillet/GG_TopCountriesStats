@@ -6,9 +6,9 @@ import pycountry
 # User configuration
 user_id = "YOUR_USER_ID"  # See README for instructions
 _ncfa_TOKEN = "YOUR_NCFA_TOKEN"  # See README for instructions
-num_duels = 100  # Number of last duels to fetch (More than ~400 will hit rate limits)
-topN = 3  # Number of top/worst countries to display
-min_guesses = 5  # Minimum number of guesses to consider a country in the stats
+num_duels = 200  # Number of last duels to fetch (More than ~400 will hit rate limits)
+topN = 5  # Number of top/worst countries to display
+min_guesses = 10  # Minimum number of guesses to consider a country in the stats
 
 # Create a session object and set the _ncfa cookie
 session = requests.Session()
@@ -103,9 +103,15 @@ def analyze_duel_stats(duel_data, user_id):
                         country_stats[country] = [
                             0,
                             0,
+                            0,
+                            0,
                         ]  # [count, total_distance, total_time]
                     country_stats[country][0] += 1
                     country_stats[country][1] += score
+                    if scoreBEN > scoreADV:
+                        country_stats[country][2] += 1  # wins
+                    elif scoreBEN < scoreADV:
+                        country_stats[country][3] += 1  # losses
 
     # Sort countries by the number of guesses
     sorted_stats = sorted(country_stats.items(), key=lambda x: x[1][0], reverse=True)
@@ -141,7 +147,49 @@ def get_country_name(country_code):
 if sorted_stats:
     # Filter countries based on the minimum number of guesses
     filtered_stats = [stat for stat in sorted_stats if stat[1][0] >= min_guesses]
+    if filtered_stats:
+        print(f"\nTop {topN} Countries by Win Rate:")
+        print(
+            f"{'Rank':<5}{'Country':<30}{'Win Rate (%)':<15}{'Wins':<10}{'Losses':<10}{'Guesses':<10}"
+        )
+        print("-" * 80)
+        for rank, (country_code, stats) in enumerate(
+            sorted(
+                filtered_stats,
+                key=lambda x: (
+                    x[1][2] / (x[1][2] + x[1][3]) if (x[1][2] + x[1][3]) > 0 else 0
+                ),
+                reverse=True,
+            )[:topN],
+            start=1,
+        ):
+            country_name = get_country_name(country_code)
+            total_games = stats[2] + stats[3]
+            win_rate = (stats[2] / total_games) * 100 if total_games > 0 else 0
+            print(
+                f"{rank:<5}{country_name:<30}{win_rate:<15.2f}{stats[2]:<10}{stats[3]:<10}{stats[0]:<10}"
+            )
 
+        print(f"\nWorst {topN} Countries by Win Rate:")
+        print(
+            f"{'Rank':<5}{'Country':<30}{'Win Rate (%)':<15}{'Wins':<10}{'Losses':<10}{'Guesses':<10}"
+        )
+        print("-" * 80)
+        for rank, (country_code, stats) in enumerate(
+            sorted(
+                filtered_stats,
+                key=lambda x: (
+                    x[1][2] / (x[1][2] + x[1][3]) if (x[1][2] + x[1][3]) > 0 else 0
+                ),
+            )[:topN],
+            start=1,
+        ):
+            country_name = get_country_name(country_code)
+            total_games = stats[2] + stats[3]
+            win_rate = (stats[2] / total_games) * 100 if total_games > 0 else 0
+            print(
+                f"{rank:<5}{country_name:<30}{win_rate:<15.2f}{stats[2]:<10}{stats[3]:<10}{stats[0]:<10}"
+            )
     if filtered_stats:
         print(f"\nTop {topN} Countries by Normalized Score:")
         print(f"{'Rank':<5}{'Country':<30}{'Normalized Score':<20}{'Guesses':<10}")
